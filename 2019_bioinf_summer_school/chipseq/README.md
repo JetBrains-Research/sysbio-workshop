@@ -2,6 +2,9 @@
 
 Materials for ChIP-Seq processing Practice, see [2019 Bioinf Summer School]( https://bioinf.me/education/summer/2019/program)
 
+By Roman Chernyatchik(roman.chernyatchik@jetbrains.com) and Oleg Shpynov(oleg.shpynov@jetbrains.com).
+
+
 This is simplified version of [chipseq-smk-pipeline](https://github.com/JetBrains-Research/chipseq-smk-pipeline) adopted for workshop demonstration.
 
 # Installation:
