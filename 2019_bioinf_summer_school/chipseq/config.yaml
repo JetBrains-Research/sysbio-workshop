@@ -1,0 +1,22 @@
+work_dir: /home/osboxes/chipseq/workdir
+fastq_dir: reads
+genome: hg19
+
+#macs2_mode: narrow
+#macs2_params: -q 0.05
+#macs2_suffix: q0.05 # do not use underscores here otherwise wrong sample wildcards
+
+macs2_mode: broad
+macs2_params: "--broad --broad-cutoff 0.1"
+macs2_suffix: broad0.1 # do not use underscores here otherwise wrong sample wildcards
+
+sicer_fragment: 150
+sicer_window: 200
+sicer_gap: 600
+sicer_significance: 0.01
+
+span_bin: 200
+span_gap: 5
+span_fdr: 1E-6
+span_params: ""
+span_markup: ""

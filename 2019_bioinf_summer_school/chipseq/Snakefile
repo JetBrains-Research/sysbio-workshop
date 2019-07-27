@@ -1,0 +1,32 @@
+from pipeline_util import *
+
+configfile: "config.yaml"
+workdir: config['work_dir']
+
+include: "step1_raw_qc.smk"
+include: "step2_alignment.smk"
+include: "step3_reads_coverage.smk"
+include: "step4_macs2.smk"
+include: "step5_sicer.smk"
+include: "step6_span.smk"
+
+rule all:
+    input:
+        # reads qc
+        rules.step1_raw_qc_results.input,
+
+        # alignment
+        rules.step2_alignment_results.input,
+
+        # visualisation
+        rules.step3_reads_coverage_results.input,
+
+        # macs2
+        rules.step4_macs2_results.input,
+
+        # sicer
+        rules.step5_sicer_results.input,
+
+        # span
+        rules.step6_span.input,
+        # rules.step6_span_tuned.input
