@@ -47,7 +47,8 @@ rule call_peaks_span:
     threads: 4
     params:
         span_params=config['span_params'],
-        control_arg=lambda wildcards, input: "" if 'control' not in input else f" -c {input.control}"
+        control_arg=lambda wildcards, input: f" -c {input.control}" if input.get('control',
+            None) else ""
     shell:
         'java -Xmx8G -jar {input.span} analyze -t {input.signal} --chrom.sizes {input.chrom_sizes} '
         '--peaks {output} --model span/fit/{wildcards.sample}_{wildcards.bin}.span --workdir span --threads {threads} '

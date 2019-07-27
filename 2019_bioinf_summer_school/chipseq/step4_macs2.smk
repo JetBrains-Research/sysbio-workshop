@@ -37,7 +37,8 @@ rule call_peaks_macs2:
         macs2_params=config['macs2_params'],
         species=macs_species(config['genome']),
         outdir=lambda wildcards, output: os.path.dirname(str(output[0])),
-        control_arg=lambda wildcards, input: "" if 'control' not in input else f" -c {input.control}"
+        control_arg=lambda wildcards, input: f" -c {input.control}" if input.get('control',
+            None) else ""
     shell:
         'macs2 callpeak -t {input.signal} {params.control_arg} --outdir {params.outdir} ' 
         '-n {wildcards.sample}_{wildcards.macs2_suffix} -g {params.species} ' 
