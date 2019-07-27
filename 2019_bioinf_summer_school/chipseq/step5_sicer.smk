@@ -7,7 +7,7 @@ def sicer_all_peaks_input():
     window_size=config['sicer_window']
     gap=config['sicer_gap']
 
-    # XXX: change significance only via config, sicer rule takes the value from
+    # XXX: change significance only via config, SICER rule takes the value from
     # config, not via wildcards:
     significance=config['sicer_significance']
 
@@ -66,7 +66,7 @@ def sicer_input_fun(wildcards):
 
 rule call_peaks_sicer:
     input: unpack(sicer_input_fun)
-    output: 'sicer/{sample}-W{width}-G{gap}-{any_suffix}'
+    output: 'sicer/{sample}-W{width}-G{gap, \d+}-{any_suffix}'
     log: 'logs/sicer/{sample}-W{width}-G{gap}-{any_suffix}.log'
 
     conda: 'envs/py27.env.yaml'
@@ -74,12 +74,12 @@ rule call_peaks_sicer:
     params:
         significance=config['sicer_significance'],
         signal_pileup_bed_fname=lambda wildcards, input: os.path.basename(input.signal_pileup),
-        control_arg=lambda wildcards, input: os.path.basename(input.control_pileup) if 'control_pileup' in input else "",
+        control_arg=lambda wildcards, input: os.path.basename(input.control_pileup) if input.get('control_pileup', None) else "",
         pileups_dir=lambda wildcards, input: os.path.split(str(input.signal_pileup))[0],
         peaks_file=lambda wildcards, output: os.path.basename(output[0]),
         fragment=config['sicer_fragment'],
         genome=config['genome'],
-        script=lambda wildcards, input: "SICER.sh" if 'control_pileup' in input else "SICER-rb.sh"
+        script=lambda wildcards, input: "SICER.sh" if input.get('control_pileup', None) else "SICER-rb.sh"
     shell:
         # SICER.sh ["InputDir"] ["bed file"] ["control file"]
         #       ["OutputDir"] ["Species"] ["redundancy threshold"]
@@ -90,46 +90,12 @@ rule call_peaks_sicer:
         #       ["OutputDir"] ["Species"] ["redundancy threshold"]
         #       ["window size (bp)"] ["fragment size"] ["effective genome fraction"]
         #       ["gap size (bp)"] ["E-value"]
-        'mkdir -p tmp_sicer &&'
-        ' echo "Significance threshold: " {params.significance} 2>&1 >> ../{log} &&'
+        'echo "Significance threshold: {params.significance}" > {log} &&'
+        ' mkdir -p tmp_sicer &&'
         ' cd tmp_sicer && '
         '  {params.script} ../{params.pileups_dir} {params.signal_pileup_bed_fname} {params.control_arg}'
         '    $(pwd) {params.genome} 1 {wildcards.width}'
         '    {params.fragment} $(cat "../{input.effective_genome_fraction}")'
-        '    {wildcards.gap} {params.significance} 2>&1 >> ../{log} &&'
-        ' mv {params.peaks_file} ../{output} 2>&1 >> ../{log}'
-
-# rule call_peaks_sicer0:
-#     input: unpack(sicer_input_fun)
-#     output: 'sicer/{sample}-W{width}-G{gap}-islands-summary-FDR{fdr}'
-#     log: 'logs/sicer/{sample}-W{width}-G{gap}-islands-summary-FDR{fdr}.log'
-#     # output: 'sicer/{sample}-W{width}-G{gap}-E{escore}.scoreisland'
-#     # log: 'logs/sicer/{sample}-W{width}-G{gap}-E{escore}_sicer.log'
-#
-#     conda: 'envs/py27.env.yaml'
-#     shadow: "shallow"
-#     params:
-#         signal_pileup_bed_fname=lambda wildcards, input: os.path.basename(input.signal_pileup),
-#         control_arg=lambda wildcards, input: os.path.basename(input.control_pileup) if 'control_pileup' in input else "",
-#         pileups_dir=lambda wildcards, input: os.path.split(str(input.signal_pileup))[0],
-#         peaks_file=lambda wildcards, output: os.path.basename(output[0]),
-#         fragment=config['sicer_fragment'],
-#         genome=config['genome'],
-#         script=lambda wildcards, input: "SICER.sh" if 'control_pileup' in input else "SICER-rb.sh"
-#     shell:
-#         # SICER.sh ["InputDir"] ["bed file"] ["control file"]
-#         #       ["OutputDir"] ["Species"] ["redundancy threshold"]
-#         #       ["window size (bp)"] ["fragment size"] ["effective genome fraction"]
-#         #       ["gap size (bp)"] [“FDR"]
-#         #
-#         # SICER-rb.sh ["InputDir"] ["bed file"]
-#         #       ["OutputDir"] ["Species"] ["redundancy threshold"]
-#         #       ["window size (bp)"] ["fragment size"] ["effective genome fraction"]
-#         #       ["gap size (bp)"] ["E-value"]
-#         'mkdir -p tmp_sicer &&'
-#         ' cd tmp_sicer && '
-#         '  {params.script} ../{params.pileups_dir} {params.signal_pileup_bed_fname} {params.control_arg}'
-#         '    $(pwd) {params.genome} 1 {wildcards.width}'
-#         '    {params.fragment} $(cat "../{input.effective_genome_fraction}")'
-#         '    {wildcards.gap} {wildcards.escore} &> ../{log} &&'
-#         ' mv {params.peaks_file} ../{output} &>> ../{log}'
+        '    {wildcards.gap} {params.significance} &>> ../{log} &&'
+        ' ls -lah  &>> ../{log} &&'
+        ' mv {params.peaks_file} ../{output} &>> ../{log}'
