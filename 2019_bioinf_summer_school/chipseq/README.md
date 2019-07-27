@@ -1,6 +1,6 @@
 # About
 
-Materials for ChIP-Seq processing Practice, see [2019 Bioinf Summer School]( https://bioinf.me/education/summer/2019/program)
+Materials for ChIP-Seq processing workshop module, see [2019 Bioinf Summer School]( https://bioinf.me/education/summer/2019/program), 31 July - 1 August 2019
 
 By Roman Chernyatchik(roman.chernyatchik@jetbrains.com) and Oleg Shpynov(oleg.shpynov@jetbrains.com).
 
