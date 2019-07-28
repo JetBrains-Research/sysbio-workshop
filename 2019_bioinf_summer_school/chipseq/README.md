@@ -37,7 +37,7 @@ For Snakemake files editing we recommend to use PyCharm IDE
 # Run Pipeline
 ```bash
 conda activate snakemake
-snakemake --use-conda --pr --ri --cores 4
+snakemake --use-conda -pr --ri --cores 4
 ```
 
 # Downstream & Playground
