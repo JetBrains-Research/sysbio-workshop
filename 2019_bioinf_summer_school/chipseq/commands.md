@@ -74,6 +74,9 @@ Already downloaded from https://www.gencodegenes.org/human/release_31lift37.html
 ```bash
 cat ~/chipseq/tracks/gencode.v31lift37.annotation.gtf | grep -v "#" | grep "^chr15" | awk -v OFS='\t' '($3=="gene") {print $1,$4-1,$5,$10}' | sort -k1,1 -k2,2n > gencode.v31lift37.annotation.bed
 ```
+```bash
+head gencode.v31lift37.annotation.bed 
+```
 
 **Find the closest genes for the peak file:**
 ```bash
@@ -89,6 +92,10 @@ bedtools closest -a ../macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.b
 * Step2 - plot profile
     ```bash
     plotProfile -m matrix.tsv.gz -out TssProfile.png --plotTitle "TSS K4me3 profile"
+    ```
+* Step3 - plot heatmap
+    ```bash
+    plotHeatmap -m matrix.tsv.gz --outFileName TssHeatmap.png --plotTitle "TSS k4me3 coverage heatmap"
     ```
 
 **Function annotation:**
