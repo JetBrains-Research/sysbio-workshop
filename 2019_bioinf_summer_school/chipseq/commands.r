@@ -17,15 +17,14 @@ library(ChIPseeker)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 library(org.Hs.eg.db)
 
-setwd("~/chipseq/workdir")
-peaks <- readPeakFile("macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak")
+setwd("~/chipseq/workdir/downstream")
+peaks <- readPeakFile("../macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak")
 peaks
 
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 peakAnno <- annotatePeak(
-  "macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak", tssRegion=c(-3000, 3000), TxDb=txdb, 
-  annoDb="org.Hs.eg.db"
-  )
+  "../macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak",
+  tssRegion=c(-3000, 3000), TxDb=txdb, annoDb="org.Hs.eg.db")
 
 plotAnnoPie(peakAnno)
 plotAnnoBar(peakAnno)
