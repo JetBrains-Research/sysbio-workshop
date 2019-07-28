@@ -119,7 +119,7 @@ tail -n 100 h3k4me3.bed >> h3k4me3_200.bed
 
 Or Take 100 top significant H3K27ac peaks (~active enhancers)
 ```bash
-cat ../macs2/GSM1102782_CD14_H3K27ac_hg19.chr15_broad0.1_peaks.broadPeak |  sort -k9,9r | awk -v OFS='\t' '{print($1,$2,$3)}' > k27ac.bed
+cat ../macs2/GSM1102782_CD14_H3K27ac_hg19.chr15_broad0.1_peaks.broadPeak |  sort -k9,9r | awk -v OFS='\t' '{print($1,$2,$3)}' > h3k27ac.bed
 head -n 100 h3k27ac.bed > h3k27ac_100.bed
 ```
 
