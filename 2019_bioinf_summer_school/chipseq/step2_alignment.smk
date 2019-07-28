@@ -37,7 +37,6 @@ rule bowtie2_align_single:
     output: temp("bams/{sample}.bam.raw")
     log: "logs/bowtie2/{sample}.log"
 
-    # conda: 'envs/bio.env.yaml'
     threads: 4
     params:
         index=lambda wildcards, input: os.path.join(
