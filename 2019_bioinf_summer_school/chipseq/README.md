@@ -32,3 +32,12 @@ For editing Snakemake files we recommend to use PyCharm IDE
 conda activate snakemake
 snakemake --use-conda --pr --ri --cores 4
 ```
+
+# Downstream & Playground
+
+Install conda environment
+```bash
+conda env create --name bio --file ./downstream.yaml
+```
+
+see `commands.txt` file

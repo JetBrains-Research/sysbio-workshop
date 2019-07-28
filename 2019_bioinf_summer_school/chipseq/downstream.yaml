@@ -1,0 +1,18 @@
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+
+#channel_priority: strict
+
+dependencies:
+  - bedtools=2.28.0
+  - bowtie2=2.3.5
+  - samtools=1.9
+  - deeptools=3.3.0
+  # - r=3.6.0
+  - python=3.7.3
+  - ipython=7.7.0
+  - snakemake=5.5.4
+  - bwa=0.7.17
