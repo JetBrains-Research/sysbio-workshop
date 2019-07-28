@@ -8,16 +8,17 @@ def sicer_all_peaks_input():
     gap=config['sicer_gap']
 
     # XXX: change significance only via config, SICER rule takes the value from
-    # config, not via wildcards:
-    significance=config['sicer_significance']
+    # config, not via wildcards
 
     sample_2_config_dict = sample_2_control(config)
     for sample in fastq_aligned_names(config):
         if sample_2_config_dict[sample] is None:
             # w/o control
+            significance=config['sicer_evalue']
             files.append(f'sicer/{sample}-W{window_size}-G{gap}-E{significance}.scoreisland')
         else:
             # with control
+            significance=config['sicer_fdr']
             files.append(f'sicer/{sample}-W{window_size}-G{gap}-islands-summary-FDR{significance}')
 
     return files
@@ -72,7 +73,8 @@ rule call_peaks_sicer:
     conda: 'envs/py27.env.yaml'
     shadow: "shallow"
     params:
-        significance=config['sicer_significance'],
+        significance=lambda wildcards, input: config['sicer_fdr'] if input.get('control_pileup',
+            None) else config['sicer_evalue'],
         signal_pileup_bed_fname=lambda wildcards, input: os.path.basename(input.signal_pileup),
         control_arg=lambda wildcards, input: os.path.basename(input.control_pileup) if input.get('control_pileup', None) else "",
         pileups_dir=lambda wildcards, input: os.path.split(str(input.signal_pileup))[0],

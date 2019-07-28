@@ -13,7 +13,8 @@ macs2_suffix: broad0.1 # do not use underscores here otherwise wrong sample wild
 sicer_fragment: 150
 sicer_window: 200
 sicer_gap: 600
-sicer_significance: 0.01
+sicer_fdr: 0.01
+sicer_evalue: 100
 
 span_bin: 200
 span_gap: 5
