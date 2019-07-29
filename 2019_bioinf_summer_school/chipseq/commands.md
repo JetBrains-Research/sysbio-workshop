@@ -1,3 +1,9 @@
+Run pipeline:
+```bash
+conda activate snakemake
+snakemake --use-conda -pr --ri --cores 2
+```
+
 Change directory:
 ```bash
 cd ~/chipseq/workdir
@@ -21,11 +27,32 @@ head -n 4 ./macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak
 cat ./macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak | sort -k9,9r | head -n 4
 ```
 
+**Max peak length**:
+```bash
+cat ./macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak | awk 'BEGIN { max_len=0 }; { len = $3-$2; if (len > max_len) max_len = len } END { print "Max peak length:", max_len }'
+```
+
+**Min peak length**:
+```bash
+cat ./macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak | awk 'BEGIN { min_len=99999999 }; {if (NF > 0) { len = $3-$2; if (len < min_len) min_len = len } }  END { print "Min peak length",  min_len }'
+```
+
+**Avg peak length**:
+```bash
+cat ./macs2/GSM1102797_CD14_H3K4me3_hg19.chr15_broad0.1_peaks.broadPeak | awk 'BEGIN { sum_len=0 }; { if (NF > 0) { sum_len += $3-$2 } }; END { print "Avg peak length:", sum_len / NR} '
+```
+
 # Explore SICER results
 
 **Preview peaks file content (first 4 lines):**
 ```bash
 head -n 4 sicer/GSM1102797_CD14_H3K4me3_hg19.chr15-W200-G600-islands-summary-FDR0.01
+```
+
+# Explore SPAN results
+
+```bash
+head -n 4 span/GSM1102797_CD14_H3K4me3_hg19.chr15_200_1E-6_5.peak
 ```
 
 # Interpretation & Playground
@@ -37,7 +64,7 @@ cat macs2/GSM1102807_CD14_input_hg19.chr15_broad0.1_peaks.broadPeak | wc -l
 
 **File with biggest number of peaks:**
 ```bash
-ls macs2/*.broadPeak sicer/* | xargs wc -l | grep -v total | sort -k1,1nr
+ls macs2/*.broadPeak sicer/* span/*.peak | xargs wc -l | grep -v total | sort -k1,1nr
 ```
 
 **Create directory for results:**
