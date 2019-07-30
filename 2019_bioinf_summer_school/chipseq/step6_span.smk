@@ -37,28 +37,39 @@ def span_input_fun(wildcards):
 
 rule call_peaks_span:
     input: unpack(span_input_fun)
-    output: 'span/{sample}_{bin}_{fdr}_{gap}.peak'
-    log: 'logs/span/{sample}_{bin}_{fdr}_{gap}.log'
+    output:
+        peaks=f'span/{{sample}}_{{bin}}_{config["span_fdr"]}_{config["span_gap"]}.peak',
+        model='span/fit/{sample}_{bin}.span'
+    log: f'logs/span/{{sample}}_{{bin}}{config["span_fdr"]}_{config["span_gap"]}.log'
 
     conda: 'envs/java8.env.yaml'
     threads: 4
     params:
+        fdr = config["span_fdr"],
+        gap = config["span_gap"],
         span_params=config['span_params'],
         control_arg=lambda wildcards, input: f" -c {input.control}" if input.get('control',
             None) else ""
     shell:
-        'java -Xmx8G -jar {input.span} analyze -t {input.signal} --chrom.sizes {input.chrom_sizes} '
-        '--peaks {output} --model span/fit/{wildcards.sample}_{wildcards.bin}.span --workdir span --threads {threads} '
-        '--bin {wildcards.bin} --fdr {wildcards.fdr} --gap {wildcards.gap} {params.span_params} &> {log}'
+        'java -Xmx3G -jar {input.span} analyze -t {input.signal} --chrom.sizes {'
+        'input.chrom_sizes} '
+        '--peaks {output.peaks} --model {output.model} --workdir span --threads {threads} '
+        '--bin {wildcards.bin} --fdr {params.fdr} --gap {params.gap} {params.span_params} &> {log}'
 
 
 def span_tuned_input_fun(wildcards):
-    args = span_input_fun(wildcards)
+    args = dict(
+        span=rules.download_span.output,
+        chrom_sizes=rules.download_chrom_sizes.output
+    )
+
     sample = wildcards.sample
+    bin = wildcards.bin
 
     anns_file = find_labels_for_sample(sample, config)
     assert anns_file, f"Peaks annotations file is missing for {sample}"
     args['span_markup'] = anns_file
+    args['model'] = f'span/fit/{sample}_{bin}.span'
     return args
 
 rule call_peaks_span_tuned:
@@ -70,5 +81,5 @@ rule call_peaks_span_tuned:
     conda: 'envs/java8.env.yaml'
     threads: 4
     shell:
-        'java -Xmx8G -jar bin/span-0.11.0.jar analyze --model span/fit/{wildcards.sample}_{wildcards.bin}.span '
+        'java -Xmx3G -jar bin/span-0.11.0.jar analyze --model {input.model} '
         '--workdir span --threads {threads}  --labels {input.span_markup} --peaks {output} &> {log}'
