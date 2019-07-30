@@ -20,4 +20,5 @@ span_bin: 200
 span_gap: 5
 span_fdr: 1E-6
 span_params: ""
+span_labels_dir: /home/osboxes/chipseq/tracks/peaks_annotations/
 span_markup: ""

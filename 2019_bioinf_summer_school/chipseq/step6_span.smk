@@ -12,10 +12,7 @@ rule step6_span:
 
 rule step6_span_tuned:
     input:
-        span_tuned_peaks=expand('span/{sample}_{span_bin}_tuned.peak',
-            span_bin=config['span_bin'],
-            sample=fastq_aligned_names(config)
-        )
+        span_tuned_peaks=tuned_peaks_input_files(config)
 
 rule download_span:
     output: 'bin/span-0.11.0.jar'
@@ -54,18 +51,24 @@ rule call_peaks_span:
         '--peaks {output} --model span/fit/{wildcards.sample}_{wildcards.bin}.span --workdir span --threads {threads} '
         '--bin {wildcards.bin} --fdr {wildcards.fdr} --gap {wildcards.gap} {params.span_params} &> {log}'
 
+
+def span_tuned_input_fun(wildcards):
+    args = span_input_fun(wildcards)
+    sample = wildcards.sample
+
+    anns_file = find_labels_for_sample(sample, config)
+    assert anns_file, f"Peaks annotations file is missing for {sample}"
+    args['span_markup'] = anns_file
+    return args
+
 rule call_peaks_span_tuned:
     input:
-        span=rules.download_span.output,
-        chrom_sizes=rules.download_chrom_sizes.output,
-        bam='bams/{sample}.bam'
+        unpack(span_tuned_input_fun)
     output: 'span/{sample}_{bin}_tuned.peak'
     log: 'logs/span/{sample}_{bin}_tuned.log'
 
     conda: 'envs/java8.env.yaml'
     threads: 4
-    params:
-        span_markup=config['span_markup']
     shell:
         'java -Xmx8G -jar bin/span-0.11.0.jar analyze --model span/fit/{wildcards.sample}_{wildcards.bin}.span '
-        '--workdir span --threads {threads}  --labels {params.span_markup} --peaks {output} &> {log}'
+        '--workdir span --threads {threads}  --labels {input.span_markup} --peaks {output} &> {log}'

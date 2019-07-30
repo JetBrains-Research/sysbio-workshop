@@ -29,4 +29,4 @@ rule all:
 
         # span
         rules.step6_span.input,
-        # rules.step6_span_tuned.input
+        rules.step6_span_tuned.input
