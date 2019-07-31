@@ -1,5 +1,10 @@
 This file URL: https://github.com/JetBrains-Research/sysbio-workshop/blob/master/2019_bioinf_summer_school/chipseq/commands.md
 
+Monocytes CD14 session: https://artyomovlab.wustl.edu/publications/supp_materials/SBW-epigenetics-StL/sessions/human_cd14_reads_cov.yaml
+
+
+
+
 Run pipeline:
 ```bash
 conda activate snakemake
