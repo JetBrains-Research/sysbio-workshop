@@ -1,12 +1,30 @@
+This file URL: https://github.com/JetBrains-Research/sysbio-workshop/blob/master/2019_bioinf_summer_school/chipseq/commands.md
+
 Run pipeline:
 ```bash
 conda activate snakemake
 snakemake --use-conda -pr --ri --cores 2
 ```
 
+# Explore results
+
 Change directory:
 ```bash
 cd ~/chipseq/workdir
+```
+
+Activate `bio` conda environment
+```bash
+cd ~/chipseq/workdir
+```
+
+View files in current directory and subdirectories
+```bash
+tree
+```
+# Explore aligned files (first 4 lines)
+```bash
+samtools view bams/GSM1102797_CD14_H3K4me3_hg19.chr15.bam | head -n 4
 ```
 
 # Explore MACS2 broad results
