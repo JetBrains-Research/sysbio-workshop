@@ -1,11 +1,15 @@
 This file URL: https://github.com/JetBrains-Research/sysbio-workshop/blob/master/2019_bioinf_summer_school/chipseq/commands.md
 
-Monocytes CD14 session: https://artyomovlab.wustl.edu/publications/supp_materials/SBW-epigenetics-StL/sessions/human_cd14_reads_cov.yaml
+# Explore Human Monocytes Epigenetics
+Open Session in JBR Genome Browser: https://artyomovlab.wustl.edu/publications/supp_materials/SBW-epigenetics-StL/sessions/human_cd14_reads_cov.yaml
+
+#Working with published DATA
+GSE112622, https://www.ncbi.nlm.nih.gov/geo/
+
+GSM3074495, https://www.ebi.ac.uk
 
 
-
-
-Run pipeline:
+# Run pipeline:
 ```bash
 conda activate snakemake
 snakemake --use-conda -pr --ri --cores 2
