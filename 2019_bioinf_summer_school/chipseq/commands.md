@@ -1,7 +1,9 @@
 This file URL: https://github.com/JetBrains-Research/sysbio-workshop/blob/master/2019_bioinf_summer_school/chipseq/commands.md
 
 # Explore Human Monocytes Epigenetics
-Open Session in JBR Genome Browser: https://artyomovlab.wustl.edu/publications/supp_materials/SBW-epigenetics-StL/sessions/human_cd14_reads_cov.yaml
+Copy url and past in JBR Genome Browser: 
+
+https://artyomovlab.wustl.edu/publications/supp_materials/SBW-epigenetics-StL/sessions/human_cd14_reads_cov.yaml
 
 # Working with published DATA
 GSE112622, https://www.ncbi.nlm.nih.gov/geo/
