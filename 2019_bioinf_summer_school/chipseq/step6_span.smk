@@ -15,8 +15,8 @@ rule step6_span_tuned:
         span_tuned_peaks=tuned_peaks_input_files(config)
 
 rule download_span:
-    output: 'bin/span-0.11.0.jar'
-    shell: 'wget -O {output} https://download.jetbrains.com/biolabs/span/span-0.11.0.4882.jar'
+    output: 'bin/span-0.12.0.jar'
+    shell: 'wget -O {output} https://download.jetbrains.com/biolabs/span/span-0.12.0.5096.jar'
 
 
 def span_input_fun(wildcards):
@@ -81,5 +81,5 @@ rule call_peaks_span_tuned:
     conda: 'envs/java8.env.yaml'
     threads: 4
     shell:
-        'java -Xmx3G -jar bin/span-0.11.0.jar analyze --model {input.model} '
+        'java -Xmx3G -jar {input.span} analyze --model {input.model} '
         '--workdir span --threads {threads}  --labels {input.span_markup} --peaks {output} &> {log}'
